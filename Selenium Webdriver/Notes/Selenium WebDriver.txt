@@ -1,0 +1,486 @@
+DAY16:
+------
+1)WebDriver is one of the components in selenium.
+2)WebDriver is a java interface.
+
+SearchContext(I)
+| (extended into)
+|
+WebDriver(I) (implemented by different classes)
+
+Firefox Browser ---- FirefoxDriver class(contain webdriver implemented methods, using them we perform operations)
+Chrome Browser ----- ChromeDriver class
+Edge Browser ------- EdgeDriver class
+IE Browser --------- InternetExplorerDriver(depricated)
+
+3)WebDriver is an API. Actions/operations on browser are performed by webdriver methods through the statements that we write in automation script. WebDriver assists between AUT/browser and automation script.
+
+API: Application programming interface(contains programming logic). An interface(mediator/medium) between two apps. API takes the request from app/user and fetches data from DB/server and responds back to app/user.
+
+Setup WebDriver in Eclipse:
+---------------------------
+1)Selenium client Library: Collection of jar files. Contains selenium classes and methods bundled into jar(Java Archiving File) files.
+2)Browser specific drivers: Executable files(.exe). WebDriver interacts with app/browser through these.
+3)Browsers(chrome,edge,firefox..).
+
+By creating Maven project we don't need to download manually, we can automatically get selenium client library and browser specific drivers. Also updates them with newer versions.
+
+Maven is a build tool used in devops team. Developed using java but better than java project.
+
+1)Create Maven project in Eclipse.
+File---Other---Maven project.
+2)Go to mvn repository
+search selenium---select selenium java---copy latest version of dependency and paste in pom.xml.  //selenium client library
+search webdrivermanager---select---copy latest version of dependency and paste in pom.xml.        //browser specific drivers
+
+DAY17:
+------
+Test Case:
+----------
+1)Launch browser.
+2)Open url - https://opensource-demo.orangehrmlive.com/
+3)Provide username - Admin.
+4)Provide password - admin123.
+5)Click on submit button.
+6)Verify the title of dashboard page.
+Exp title - OrangeHRM.
+7)Close browser.
+
+Test Case:
+----------
+1)Launch browser.
+2)Open url - https://admin-demo.nopcommerce.com/login?ReturnUrl=%2Fadmin%2F
+3)Provide username - admin@yourstore.com
+4)Provide password - admin
+5)Click on submit button.
+6)Verify the title of dashboard page.
+Exp title - Dashboard / nopCommerce administration.
+7)Close browser.
+
+DAY18:
+------
+Automation mainly involves:
+1)Identifying elements: using selenium Locators.
+2)Perform actions: using WebDriver built-in Methods.
+
+Locator: Used to identify the web elements.
+Types:
+1)Locators: Id, name, Linktext, PatialLinktext, Class Name, TagName. Can directly capture from html code.
+2)Customized Locators: CSS Selector(Tag and Id, Tag and class, Tag and attribute, Tag, class and attribute), XPath(Absolute and Relative). We have to generate/write these.
+
+If we want to identify multiple webelements then we can use Class Name and Tag Name attribute.
+
+Buttons have 'button' tagname, input box have 'input' tagname and links has 'a' tagname.
+
+We always use lintext instead of partial linktext for avoiding errors(duplicate/same/repeated values). These two methods are used for links only.
+
+findElement(takes locators as parameter using By class) - returns single webelement with return type WebElement.
+findElements(takes locators as parameter using By class) - returns multiple webelements with return type List<WebElement>.
+
+List<WebElement> - list collection since captures multiple elements including duplicates. list of webelements. findelements returns list type that's why we use List.
+
+length - arrays a.length
+length() - strings s.length()
+size() - List, Set, HashMap
+
+Scenario1: locator is matching with single web element.
+findElement(loc) -> returns single webelement with return type WebElement.
+findElements(loc)-> returns single webelement with return type List<WebElement>.
+
+Scenario2: locator is matching with multiple web elements.
+findElement(loc) -> returns single first webelement on page with return type WebElement.
+findElements(loc)-> returns multiple webelements with return type List<WebElement>.
+
+Scenario3: locator is incorrect(no elements are matching with locator).
+findElement(loc) -> returns NoSuchElementException.
+findElements(loc)-> returns 0(zero because list does not match with any elements)with return type List<WebElement>.
+
+DAY19: Selenium Locators - ID, Name, LinkText, Partial LinkText, ClassName and TagName.
+------
+
+DAY20:  
+------
+Selenium Locators:
+------------------
+CSS Selector: Cascading Style Sheets. Designers use HTML(to design web elements), CSS(make elements attractive) and JavaScript(to make elements active). By
+using CSS we can locate/identify the elements. We have method cssSelector().
+"driver.findElement(By.cssSelector(selector));"
+Four combinations:
+Tag and ID. We differentiate by using #
+Tag and Class. We differentiate by using .
+Tag and attribute(any). We differentiate by using []
+Tag, Class and attribute. We differentiate by using .[]
+
+XPath: Address of an element which traverses through every node till the element is found in DOM. It will navigate through the DOM and identify the element. Address is in the DOM.
+DOM is Document Object Model(Script). At run time browser generates DOM structure while browsing/requesting data. XPath works based on DOM. 
+
+2 kinds of XPath:
+-----------------
+1)Absolute XPath(full xpath): starts from the root node, uses no attributes, long/lengthy.
+
+  /html/body/header/div/div/div[1]/div/a/img
+
+2)Relative XPath(partial xpath): directly jumps to that element, uses attribute, shorter. Instead of * we can specify tagname. If the current tag does not have any attributes we go for attributes of parent/grandparent tags.
+
+  //*[@id="logo"]/a/img (or) //div[@id="logo"]/a/img
+
+Which one we will prefer and why:
+---------------------------------
+Most of the times we prefer relative xpath. Because absolute xpath is lengthy, includes so many tags and code looks ugly but this is not definite reason. To identify the element we need to traverse through so many nodes and if developer changes/moves/introduces new element then xpath will be broken and element is difficult to identify. In relative xpath we are directly jumping to that element with the attribute and there is no hierarchy.
+
+How to write our own xpath:
+---------------------------
+syntax: relative xpath; inspect the element, ctrl F and search to validate xpath.
+
+//tagname[@attribute=value of attribute]  or  //*[@attribute=value of attribute]
+
+How to generate an xpath automatically:
+---------------------------------------
+1)Using developers tools: right click on element, inspect and copy xpath.
+2)Using selectors hub: extension of browser. We can identify all locators, we can write and test our own xpath, it will give auto suggestions and we can use which one we like.
+selectorshub/any extensions will not work on browser which are launched through automation script.
+
+xpath having multiple attributes.
+xpath functions - text()(does not ignore space)/normalize-space()(ignore space between), contains(), starts-with(), last().
+xpath operators - and or
+xpath axes - following, preceding, sibling parent, self, ancestor
+how to locate elements whose attributes are dynamically changing.
+
+DAY21:
+------
+xpath functions: how to locate elements whose attributes are dynamically changing.
+text() and contains(): if inner text is static then text() function is enough; but if it is dynamic then we use contains() with text() function.
+text() and starts-with(): if prefix of inner text is static then we use starts-with() along with text() function.
+if you have pre populated text in input/other element box then you can use value/placeholder attributes.
+ex: //input[@value="Amulya"]
+xpath having multiple attributes:
+syntax: 
+//*[@attribute1=value1][@attribute2=value2]...[attributeN=valueN]
+//tagname[@attribute1=value1][@attribute2=value2]...[attributeN=valueN]
+//input[@name='username][@placeholder='username']
+xpath operators - and or:
+//input[@name='username and @placeholder='username']  here both attributes should be true.
+//input[@name='username or @placeholder='xyz']  here any one attribute should be true.
+
+No inner text and no attributes then how to locate such element: by using other elements which are surrounded to this element by using xpath axes.
+xpath axes: ancestor, parent, siblings, self, child and descendant.
+syntax:
+Locating parent element:
+//<knownXpath>/parent::*
+//input[@id='txtusername']/parent::form   - identifying parent element by using child
+//input[@id='txtusername']/parent::*
+//input[@id='txtusername']/..
+
+Locating child element:
+//div[@id='divUsername']/child::input     - identifying child element by using parent
+//div[@id='divUsername']/input
+
+Locating grandchildren element:
+//form[@id='frmLogin']/descendant::input                            - identifying descendant element by using ancestor
+//form[@id='frmLogin']//input 
+//form/*/input
+//form/div/input
+
+Locating ancestor element:
+//input[@id='txtusername']/ancestor::form - identifying ancestor element by using descendant
+//input[@id='txtusername']/ancestor::*
+
+Locating following elements:
+//input[@id='txtUsername']/following::input
+//input[@id='txtUsername']/following::*
+
+Locating preceding elements:
+//span[text()='password']/preceding::input
+//span[text()='password']/preceding::input[2]
+
+Locating following sibling:
+//*[@id='txtusername']/following-sibling::span
+//*[@id='txtusername']/following-sibling::*
+
+Locating preceding sibling:
+//span[contains()(text(),'Username']/preceding-sibling::input
+//span[contains()(text(),'Username']/preceding-sibling::*
+
+DAY22:
+------
+1)get methods: we can access through webdriver instance/object(webdriver driver =new chromedriver();)
+get(url)
+getTitle()
+getCurrentURL()
+getPageSource(): returns entire pagesource(code for webpage)
+getWindowHandle(): returns single browser window id(different for everytime you run browser)
+getWindowHandles(): returns set<String> of multiple browser window ids(no duplicates that's why set is used)
+
+2)conditional methods: these are accessed through web elements and not from driver instance. Returns true/false.
+1)isDisplayed()
+2)isEnabled()
+3)isSelected()
+
+3)browser methods: 
+close(): closes current browser window. Whichever browser we opened through browser instance, our driver will focus on that browser window only(in this case first).
+quit(): closes multiple/all browser windows. 
+
+DAY23:
+------
+4)wait methods: wait statements are used to solve synchronzation problem in automation.
+
+Thread.sleep(ms) - provided by java.
+sleep(): 
+Advantage:
+It is easy to use.
+Disadvantage:
+If the time is not sufficient then you will get exception.
+It will wait for maximum timeout which reduces the performance of script.
+For multiple elements we have to write multiple times.
+
+implicit wait: 
+Advantages:
+Easy to use.
+We write it only once and one statement.
+It will not wait till maximum time if the element is available.
+Applicable for all the elements.
+Disadvantages:
+If the time is not sufficient then you will get exception.
+
+explicit wait/fluent wait(another flavor of explicit wait-this has some additional options from explicit wait- handles exceptions automatically):
+Declaration
+Usage
+Points:
+Conditional based. It works more effectively.
+Finding element is inclusive.
+It will wait for condition to be true, then considers the time.
+We need to write multiple statements for multiple elements.
+
+fluent wait:
+    //Waiting 30 seconds for an element to be present on the page, checking
+   // for its presence once every 5 seconds.
+
+   Wait<WebDriver> mywait = new FluentWait<WebDriver>(driver)
+       .withTimeout(Duration.ofSeconds(30L))
+       .pollingEvery(Duration.ofSeconds(5L))
+       .ignoring(NoSuchElementException.class);
+
+   WebElement foo = wait.until(new Function<WebDriver, WebElement>() {
+     public WebElement apply(WebDriver driver) {
+       return driver.findElement(By.id("foo"));
+     }
+   });
+
+5)navigational methods:
+navigate().to(url): same as driver.get(url) but driver.get(url) accepts only string format and navigate().to(url) will accept in string and url format. navigate().to(url) internally calls driver.get() and if url is string format then fine else if url is in url format then internally it will be converted to string format and sent to driver.get() method.
+
+navigate().forward()
+navigate().back()
+navigate().refresh()
+
+driver.navigate().to(url);
+
+"https://www.google.com" ---> string format
+URL myurl=new URL("https://google.com") --> Url format
+
+DAY24:
+------
+Checkboxes
+Dropdowns
+
+Dropdown types:
+1)Dropdown having select tag in DOM.
+2)Dropdown not having select tag in DOM(input/div) - Bootstrap dropdown.
+
+By using select class we can handle dropdowns which have select tag. Without using select class also we can handle.
+
+Assignment:
+Handle dropdown without using select class
+Select country and state
+https://phppot.com/demo/jquery-dependent-dropdown-list-countries-and-states/
+
+DAY25:
+------
+3)Auto suggest dropdown(dynamic).
+
+Alerts/popups:
+1)Alert with ok button.
+2)Alert with ok and cancel button.
+3)Alert with inputbox along with ok and cancel button.
+4)Alert with no elements.
+
+If you don't want to do any action and close alrert window then don't need to capture in variable. driver.switchTo().alert().accept();
+
+accept()
+dismiss()
+getText()
+
+Assignment:
+1)Auto suggestion box
+https://www.bing.com
+2)Alert
+https://the-internet-herokuapp.com/javascript_alerts
+https://mail.rediff.com/cgi-bin/login.cgi
+
+DAY26:
+------
+Handle frames/iframe:
+Methods: first we need to switch to frame and then perform actions.
+we switch using driver instance: 
+driver.switchTo().frame(name/id)
+driver.switchTo().frame(WebElement)
+driver.switchTo().frame(index)
+driver.switchTo().defaultContent();
+
+Handle browser windows:
+getWindowHandle() - returns id of single window(in which driver is focused)
+getWindowHandles()- returns ids of multiple windows
+
+driver.switchTo().window(window id)
+
+If many browser windows are opened:
+close() - close single browser window which is focused by driver.
+quit() -  closes all browser windows which are currently opened.
+If we want to close specific browser windows by our choice:
+
+3 types of switching commands:
+1)driver.switchTo().alert()
+2)driver.switchTo().frame()
+3)driver.switchTo().window()
+
+Assignment:
+1)Search, opening links, switch to browser windows, capture titles, close all browser windows.
+https://testautomationpractice.blogspot.com/
+2)iframe: switch, clear existing text and paste new text
+http://the-internet.herokuapp.com/iframe
+
+DAY27:
+------
+Web Table:
+static table : data does not change
+dynamic table: data keeps changing. 
+pagination table: all data is displayed divided by pages.
+
+DAY28:
+------
+Date picker.
+
+We have two types of webelements:
+Standard
+Customized
+
+dob: past date
+travel apps: future date
+
+Assignments:
+1)https://blazedemo.com/
+2)https://www.dummyticket.com/dummy-ticket-for-visa-application/
+
+DAY29:
+------
+Mouse actions: Actions - class provided by selenium webdriver.
+Mouse hover - moveToElement()
+Right click - contextClick(Element)
+Double click - doubleClick(Element)
+Drag and drop - dragAndDrop()
+Slider - dragAndDropBy(Element,x,y)
+
+1)<input id='abc'>testing</input> - inner text is 'testing'
+findElement(Loc).getText(); //getText() method always returns inner text of element.
+findElement(Loc).getAttribute("value"); //returns nothing. Here we have only id attribute and there is no value hence this method will not work here.
+
+2)<input id='abc' value='testing'/> - no inner text
+findElement(Loc).getText(); //returns nothing
+findElement(Loc).getAttribute("value"); //getAttribute("value") returns value of any attribute of element.  
+findElement(Loc).getAttribute("id"); //If we want value of id then we can pass.
+
+Actions Vs Action:
+Actions - class
+Action - used to store variable.
+build.perform()
+perform()
+
+Assignment:
+Drag and drop
+http://demo.guru99.com/test/drag_drop.html
+
+DAY30:
+------
+Keyboard actions
+
+JavaScriptExecutor: It is an interface and it contains executeScript().
+
+executeScript(): we can execute javascript statements in selenium using this method.
+
+Sometimes webdriver methods may not be able to interact with the elements due to some delay. When we are initiating sendKeys() by sending some data and if there is a delay(in sendKeys() code) then we get element intercepted exception. To solve this problem we will directly these JS statements by using executeScript() so that this directly interacts with element.
+
+DAY31:
+------
+Broken links
+Normally links have href(hyperlink reference) and attribute and corresponding value. By using href attribute we send request to server and get the response from server and if the status code is greater than or equal to 400 then it is broken link.
+
+Capture screenshot
+
+Headless browser testing: Without ui we can execute test cases in backend. We use this last stages of testing.
+Advantage: Execution is fast.
+Disadvantage: We don't know what it is testing. We can't explore functionality/can't see the actions or validations.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
